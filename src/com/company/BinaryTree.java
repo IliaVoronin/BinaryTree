@@ -102,7 +102,6 @@ public class BinaryTree {
 
     }
 
-
     public boolean contains(int value) {   //содержание по значению узла
 
         return findNode(value) != null;
@@ -112,6 +111,158 @@ public class BinaryTree {
     public boolean contains(Node node) {   //содержание по узлу
 
         return findNode(node.value) != null;
+
+    }
+
+    public boolean deleteNode(int value) {
+
+        Node additionalNode = root;
+
+        Node parentNode = root;
+
+        Boolean isLeftChild = true;
+
+        while (additionalNode.value != value) {        //поиск узла и его родителя
+
+            parentNode = additionalNode;
+
+            if (value < additionalNode.value) {
+
+                isLeftChild = true;
+
+                additionalNode = additionalNode.leftChild;
+
+            } else {
+
+                isLeftChild = false;
+
+                additionalNode = additionalNode.rightChild;
+
+            }
+
+            if (additionalNode == null) {
+
+                return false;
+
+            }
+
+        }
+
+        if (additionalNode.leftChild == null && additionalNode.rightChild == null) {   //узел не имеет детей
+
+            if (additionalNode == root) {
+
+                root = null;
+
+            } else if (isLeftChild) {
+
+                parentNode.leftChild = null;
+
+            } else {
+
+                parentNode.rightChild = null;
+
+            }
+
+        } else if (additionalNode.rightChild == null) {                              //узел имеет только левого ребенка
+
+            if (additionalNode == root) {
+
+                root = additionalNode.leftChild;
+
+            } else if (isLeftChild) {
+
+                parentNode.leftChild = additionalNode.leftChild;
+
+                parentNode.leftChild.parent = parentNode;
+
+            } else {
+
+                parentNode.rightChild = additionalNode.leftChild;
+
+                parentNode.rightChild.parent = parentNode;
+
+            }
+
+        } else if (additionalNode.leftChild == null) {                                //узел имеет только правого ребенка
+
+            if (additionalNode == root) {
+
+                root = additionalNode.rightChild;
+
+            } else if (isLeftChild) {
+
+                parentNode.leftChild = additionalNode.rightChild;
+
+                parentNode.leftChild.parent = parentNode;
+
+            } else {
+
+                parentNode.rightChild = additionalNode.rightChild;
+
+                parentNode.rightChild.parent = parentNode;
+
+            }
+
+        } else {                                                                    //у узла есть оба ребенка
+
+            Node replacementNode = getReplacementNode(additionalNode);
+
+            if (additionalNode == root) {
+
+                root = replacementNode;
+
+            } else if (isLeftChild) {
+
+                parentNode.leftChild = replacementNode;
+
+                parentNode.leftChild.parent = parentNode;
+
+            } else {
+
+                parentNode.rightChild = replacementNode;
+
+                parentNode.rightChild.parent = parentNode;
+
+            }
+
+            replacementNode.leftChild = additionalNode.leftChild;
+
+            replacementNode.leftChild.parent = replacementNode;
+
+        }
+
+        return true;
+
+    }
+
+    private Node getReplacementNode(Node replacedNode) {
+
+        Node replacementParent = replacedNode;
+
+        Node replacement = replacedNode;
+
+        Node additionalNode = replacedNode.rightChild;
+
+        while(additionalNode != null) {
+
+            replacementParent = replacement;
+
+            replacement = additionalNode;
+
+            additionalNode = additionalNode.leftChild;
+
+        }
+
+        if (replacement != replacedNode.rightChild) {
+
+            replacementParent.leftChild = replacement.rightChild;
+
+            replacement.rightChild = replacedNode.rightChild;
+
+        }
+
+        return replacement;
 
     }
 
