@@ -1,12 +1,12 @@
 package com.company;
 
+import java.util.Objects;
+
 public class BinaryTree {
 
     Node root;
 
-    public void addNode(int value, String name) {   //добавление нового узла по его значению
-
-        Node newNode = new Node(value, name);
+    public void addNode(Node newNode) {   //добавление нового узла по его значению
 
         if (root == null) {
 
@@ -22,7 +22,7 @@ public class BinaryTree {
 
                 parentNode = additionalNode;
 
-                if (value < additionalNode.value) {
+                if (newNode.value < additionalNode.value) {
 
                     additionalNode = additionalNode.leftChild;
 
@@ -58,13 +58,11 @@ public class BinaryTree {
 
     }
 
-    public void addNode(Node newNode) {   //добавление существующего узла
+    public void addNode(int value) {   //добавление существующего узла
 
-        int value = newNode.value;
+        Node newNode = new Node(value);
 
-        String name = newNode.name;
-
-        addNode(value, name);
+        addNode(newNode);
 
     }
 
@@ -244,7 +242,7 @@ public class BinaryTree {
 
         Node additionalNode = replacedNode.rightChild;
 
-        while(additionalNode != null) {
+        while (additionalNode != null) {
 
             replacementParent = replacement;
 
@@ -260,9 +258,49 @@ public class BinaryTree {
 
             replacement.rightChild = replacedNode.rightChild;
 
+            if (replacement.rightChild != null) {
+
+                replacement.rightChild.parent = replacement;
+
+            }
+
         }
 
         return replacement;
+
+    }
+
+    public String toString() {
+
+        return toString(root).trim();
+
+    }
+
+    private String toString(Node root) {
+
+        String output = "";
+
+        if (root == null) return "";
+
+        output += toString(root.leftChild);
+
+        output += " " + root.value;
+
+        output += toString(root.rightChild);
+
+        return output;
+    }
+
+    public boolean equals(BinaryTree other) {
+
+        return toString(root).equals(toString(other.root));
+
+    }
+
+    @Override
+    public int hashCode() {           // ???
+
+        return Objects.hash(root);
 
     }
 
@@ -272,25 +310,21 @@ class Node {
 
     int value;
 
-    String name;
-
     Node parent;
 
     Node rightChild;
 
     Node leftChild;
 
-    Node (int value, String name) {
+    Node(int value) {
 
         this.value = value;
-
-        this.name = name;
 
     }
 
     public String toString() {
 
-        return name + " " + value;
+        return "Value: " + value;
 
     }
 
