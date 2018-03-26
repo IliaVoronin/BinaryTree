@@ -12,9 +12,9 @@ public class Tests {
         testTree.addNode(5);
         testTree.addNode(3);
         testTree.addNode(7);
-        assertEquals("Value: 5", testTree.root.toString());
-        assertEquals("Value: 3", testTree.root.leftChild.toString());
-        assertEquals("Value: 7", testTree.root.rightChild.toString());
+        assertEquals("Value: 5", testTree.getRoot().toString());
+        assertEquals("Value: 3", testTree.getRoot().getLeftChild().toString());
+        assertEquals("Value: 7", testTree.getRoot().getRightChild().toString());
     }
 
     @Test
@@ -26,35 +26,44 @@ public class Tests {
 
     @Test
     public void findNode () {
-        Node newNode = new Node(1);
-        testTree.addNode(newNode);
+        testTree.addNode(1);
         assertEquals("Value: 1", testTree.findNode(1).toString());
     }
 
     @Test
     public void deleteNode() {
-        testTree.addNode(10);
-        testTree.addNode(5);
-        testTree.addNode(15);
-        testTree.deleteNode(5);
-        testTree.deleteNode(15);
-        assertEquals(null,testTree.root.leftChild);
-        assertEquals(null,testTree.root.rightChild);                         //удаление "листков"
 
-        testTree.addNode(15);
-        testTree.addNode(20);
-        testTree.deleteNode(15);
-        assertEquals("Value: 20", testTree.root.rightChild.toString());      //удаление элемента с правым ребенком
+        BinaryTree treeOne = new BinaryTree();
+        treeOne.addNode(10);
+        treeOne.addNode(5);
+        treeOne.addNode(15);
+        treeOne.deleteNode(5);
+        treeOne.deleteNode(15);
+        assertEquals(null,treeOne.getRoot().getLeftChild());
+        assertEquals(null,treeOne.getRoot().getRightChild());                         //удаление "листков"
 
-        testTree.addNode(13);
-        testTree.deleteNode(20);
-        assertEquals("Value: 13", testTree.root.rightChild.toString());      //удаление элемнта с левым ребенком
+        BinaryTree treeTwo = new BinaryTree();
+        treeTwo.addNode(10);
+        treeTwo.addNode(15);
+        treeTwo.addNode(20);
+        treeTwo.deleteNode(15);
+        assertEquals("Value: 20", treeTwo.getRoot().getRightChild().toString());      //удаление элемента с правым ребенком
 
-        testTree.addNode(11);
-        testTree.addNode(14);
-        testTree.deleteNode(13);
-        assertEquals("Value: 14", testTree.root.rightChild.toString());      //удаление элемента с двумя детьми
-        assertEquals("Value: 11", testTree.findNode(14).leftChild.toString());
+        BinaryTree treeThree = new BinaryTree();
+        treeThree.addNode(10);
+        treeThree.addNode(20);
+        treeThree.addNode(13);
+        treeThree.deleteNode(20);
+        assertEquals("Value: 13", treeThree.getRoot().getRightChild().toString());      //удаление элемнта с левым ребенком
+
+        BinaryTree treeFour = new BinaryTree();
+        treeFour.addNode(10);
+        treeFour.addNode(13);
+        treeFour.addNode(11);
+        treeFour.addNode(14);
+        treeFour.deleteNode(13);
+        assertEquals("Value: 14", treeFour.getRoot().getRightChild().toString());      //удаление элемента с двумя детьми
+        assertEquals("Value: 11", treeFour.findNode(14).getLeftChild().toString());
 
     }
 
@@ -73,6 +82,7 @@ public class Tests {
 
     @Test
     public void equals() {
+
         BinaryTree a = new BinaryTree();
         BinaryTree b = new BinaryTree();
         a.addNode(2);
@@ -80,9 +90,12 @@ public class Tests {
         b.addNode(2);
         b.addNode(3);
         assertEquals(true, a.equals(b));
-        b.addNode(1);
-        assertEquals(false, a.equals(b));
+
+        BinaryTree c = new BinaryTree();
+        BinaryTree d = new BinaryTree();
+        c.addNode(1);
+        d.addNode(2);
+        assertEquals(false, c.equals(d));
 
     }
-
 }
